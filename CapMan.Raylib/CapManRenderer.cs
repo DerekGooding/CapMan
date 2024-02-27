@@ -6,30 +6,11 @@ public class CapManRenderer
     private double _lastX;
     private double _lastY;
     private static SpriteSheet? s_spriteSheet;
-    public static SpriteSheet SpriteSheet
-    {
-        get
-        {
-            if (s_spriteSheet == null)
-            {
-                s_spriteSheet = SpriteSheet.Get("assets/sprites/capman.png", 1, 3);
-            }
-            return s_spriteSheet;
-        }
-    }
+
+    public static SpriteSheet SpriteSheet => s_spriteSheet ??= SpriteSheet.Get("assets/sprites/capman.png", 1, 3);
 
     private AnimatedSprite? _sprite;
-    public AnimatedSprite Sprite
-    {
-        get
-        {
-            if (_sprite == null)
-            {
-                _sprite = new AnimatedSprite(SpriteSheet, [(0, 0), (0, 1), (0, 2), (0, 1)]);
-            }
-            return _sprite;
-        }
-    }
+    public AnimatedSprite Sprite => _sprite ??= new AnimatedSprite(SpriteSheet, [(0, 0), (0, 1), (0, 2), (0, 1)]);
 
     public void Render(PlayerActor capman, int left, int top)
     {
@@ -47,10 +28,8 @@ public class CapManRenderer
             _ => throw new Exception($"Unexpected direction {capman.CurrentDirection}"),
         };
         Sprite.FlipX = capman.CurrentDirection == Direction.Right ? true : false;
-        int x = (int)(capman.Position.X * BoardRenderer.CellSize) + BoardRenderer.CellSize / 2;
-        int y = (int)(capman.Position.Y * BoardRenderer.CellSize) + BoardRenderer.CellSize / 2;
-        x = (int)(x * capman.Speed);
-        y = (int)(y * capman.Speed);
+        int x = (int)(((capman.Position.X * BoardRenderer.CellSize) + BoardRenderer.CellSize / 2) * capman.Speed);
+        int y = (int)(((capman.Position.Y * BoardRenderer.CellSize) + BoardRenderer.CellSize / 2) * capman.Speed);
         Sprite.Draw(left + x, top + y, Color.White);
     }
 
